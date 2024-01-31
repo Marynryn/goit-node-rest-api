@@ -8,6 +8,7 @@ const contactsPath = path.join("db", "contacts.json");
 export const listContacts = async () => {
   try {
     const data = await fs.readFile(contactsPath);
+
     return JSON.parse(data.toString());
   } catch (error) {}
   // ...твій код. Повертає масив контактів.

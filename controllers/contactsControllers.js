@@ -13,10 +13,7 @@ import {
 export const getAllContacts = async (req, res) => {
   const contacts = await listContacts();
 
-  res.status(200).json({
-    msg: "Success!",
-    contacts,
-  });
+  res.status(200).json(contacts);
 };
 
 export const getOneContact = async (req, res) => {
@@ -24,10 +21,7 @@ export const getOneContact = async (req, res) => {
   const contactById = await getContactById(id);
 
   if (contactById) {
-    res.status(200).json({
-      msg: "Success!",
-      contactById,
-    });
+    res.status(200).json(contactById);
   } else {
     return res.status(404).json({
       msg: "Not found..",
@@ -40,10 +34,7 @@ export const deleteContact = async (req, res) => {
   const contact = await removeContact(id);
 
   if (contact != null) {
-    res.status(200).json({
-      msg: "Success!",
-      contact,
-    });
+    res.status(200).json(contact);
   } else {
     return res.status(404).json({
       msg: "Not found..",
@@ -53,16 +44,13 @@ export const deleteContact = async (req, res) => {
 
 export const createContact = async (req, res) => {
   const { value, error } = createContactSchema.validate(req.body);
-  console.log(req.body);
+
   if (error) {
     return res.status(400).json({ message: error.message });
   }
   const newContact = await addContact(value);
 
-  res.status(201).json({
-    msg: "Success!",
-    contacts: newContact,
-  });
+  res.status(201).json(newContact);
 };
 
 export const updateContacts = async (req, res) => {
@@ -70,12 +58,16 @@ export const updateContacts = async (req, res) => {
 
   try {
     const updatedContact = await updateContact(id, req.body);
-
+    if (Object.keys(req.body).length === 0) {
+      return res
+        .status(400)
+        .json({ message: "Body must have at least one field" });
+    }
     if (!updatedContact) {
       return res.status(404).json({ message: "Not found" });
     }
 
-    res.status(200).json({ updatedContact });
+    res.status(200).json(updatedContact);
   } catch (error) {
     console.error("Error updating contact:", error);
     res.status(500).json({ message: "Server error" });
