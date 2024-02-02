@@ -1,14 +1,13 @@
 import express from "express";
-import {
-  validateCreateContactBody,
-  validateUpdateContactBody,
-} from "../helpers/validateBody.js";
+import * as middleware from "../middlewares/index.js";
+import { validateStatusContactBody } from "../schemas/contactsSchemas.js";
 import {
   getAllContacts,
   getOneContact,
   deleteContact,
   createContact,
   updateContacts,
+  updateStatusContact,
 } from "../controllers/contactsControllers.js";
 
 const contactsRouter = express.Router();
@@ -19,8 +18,14 @@ contactsRouter.get("/:id", getOneContact);
 
 contactsRouter.delete("/:id", deleteContact);
 
-contactsRouter.post("/", validateCreateContactBody, createContact);
+contactsRouter.post("/", middleware.checkCreateContactData, createContact);
 
-contactsRouter.put("/:id", validateUpdateContactBody, updateContacts);
+contactsRouter.put("/:id", middleware.checkUpdateContactData, updateContacts);
+
+contactsRouter.patch(
+  "/:id/favorite",
+  validateStatusContactBody,
+  updateStatusContact
+);
 
 export default contactsRouter;
