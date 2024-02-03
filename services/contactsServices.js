@@ -15,13 +15,11 @@ export const updateStatusContact = (id, { favorite }) =>
 
 export const checkContactId = async (id) => {
   const isIdValid = Types.ObjectId.isValid(id);
-
-  if (!isIdValid) throw new HttpError(404, "User not found..");
-
-  const contactExists = await Contact.exists({ _id: id });
-
-  if (!contactExists) throw new HttpError(404, "User not found..");
+  if (!isIdValid) return false;
+  const contact = await getContactById(id);
+  return contact !== null;
 };
+
 export const checkContactExists = async (filter, throwError = true) => {
   const contactExists = await Contact.exists(filter);
   if (contactExists && throwError) {

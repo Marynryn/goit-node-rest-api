@@ -7,13 +7,31 @@ export const getAllContacts = catchAsync(async (req, res) => {
 });
 
 export const getOneContact = catchAsync(async (req, res) => {
-  const contactById = await contactsServices.getContactById(req.params.id);
-  res.status(200).json(contactById);
+  const isContactValid = await contactsServices.checkContactId(req.params.id);
+
+  if (!isContactValid) {
+    return res.status(404).json({
+      msg: "Not found..",
+    });
+  } else {
+    const contactById = await contactsServices.getContactById(req.params.id);
+
+    res.status(200).json(contactById);
+  }
 });
 
 export const deleteContact = catchAsync(async (req, res) => {
-  const contact = await contactsServices.removeContact(req.params.id);
-  res.sendStatus(204).json(contact);
+  const isContactValid = await contactsServices.checkContactId(req.params.id);
+
+  if (!isContactValid) {
+    return res.status(404).json({
+      message: "Not found",
+    });
+  }
+
+  const removedContact = await contactsServices.removeContact(req.params.id);
+
+  res.status(200).json(removedContact);
 });
 
 export const createContact = catchAsync(async (req, res) => {

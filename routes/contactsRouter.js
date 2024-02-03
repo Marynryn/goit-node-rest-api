@@ -1,6 +1,6 @@
 import express from "express";
 import * as middleware from "../middlewares/index.js";
-import { validateStatusContactBody } from "../schemas/contactsSchemas.js";
+
 import {
   getAllContacts,
   getOneContact,
@@ -24,7 +24,7 @@ contactsRouter.put("/:id", middleware.checkUpdateContactData, updateContacts);
 
 contactsRouter.patch(
   "/:id/favorite",
-  validateStatusContactBody,
+  middleware.checkStatusContactBody,
   updateStatusContact
 );
 

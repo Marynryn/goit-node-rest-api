@@ -29,15 +29,8 @@ export const validateUpdateContactBody = joiValidator((data) =>
   }).validate(data)
 );
 
-export const patchContactSchema = Joi.object({
-  favorite: Joi.bool().required(),
-});
-export const validateStatusContactBody = (req, res, next) => {
-  const { error } = patchContactSchema.validate(req.body);
-  if (error) {
-    console.error("Validation Error:", error);
-    res.status(400).json({ message: error.message });
-    return;
-  }
-  next();
-};
+export const validatePatchContactSchema = joiValidator((data) =>
+  Joi.object({
+    favorite: Joi.bool().required(),
+  }).validate(data)
+);
