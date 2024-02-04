@@ -1,6 +1,10 @@
 import express from "express";
-import * as middleware from "../middlewares/index.js";
-
+import {
+  validateUpdateStatusContact,
+  validateCreateContactBody,
+  validateUpdateContactBody,
+} from "../helpers/validateBody.js";
+import { isIdValid } from "../middlewares/index.js";
 import {
   getAllContacts,
   getOneContact,
@@ -14,17 +18,23 @@ const contactsRouter = express.Router();
 
 contactsRouter.get("/", getAllContacts);
 
-contactsRouter.get("/:id", getOneContact);
+contactsRouter.get("/:id", isIdValid, getOneContact);
 
-contactsRouter.delete("/:id", deleteContact);
+contactsRouter.delete("/:id", isIdValid, deleteContact);
 
-contactsRouter.post("/", middleware.checkCreateContactData, createContact);
+contactsRouter.post("/", validateCreateContactBody, createContact);
 
-contactsRouter.put("/:id", middleware.checkUpdateContactData, updateContacts);
+contactsRouter.put(
+  "/:id",
+  isIdValid,
+  validateUpdateContactBody,
+  updateContacts
+);
 
 contactsRouter.patch(
   "/:id/favorite",
-  middleware.checkStatusContactBody,
+  isIdValid,
+  validateUpdateStatusContact,
   updateStatusContact
 );
 

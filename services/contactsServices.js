@@ -1,5 +1,5 @@
 import { Contact } from "../model/contactModel.js";
-import { Types } from "mongoose";
+
 import HttpError from "../helpers/HttpError.js";
 
 export const getContactsList = () => Contact.find();
@@ -10,20 +10,13 @@ export const addContact = (body) => Contact.create(body);
 export const updateContact = (id, body) =>
   Contact.findByIdAndUpdate(id, body, { new: true });
 
-export const updateStatusContact = (id, { favorite }) =>
-  Contact.findByIdAndUpdate(id, { $set: { favorite } }, { new: true });
-
-export const checkContactId = async (id) => {
-  const isIdValid = Types.ObjectId.isValid(id);
-  if (!isIdValid) return false;
-  const contact = await getContactById(id);
-  return contact !== null;
-};
+export const updateStatusContact = (id, body) =>
+  Contact.findByIdAndUpdate(id, body, { new: true });
 
 export const checkContactExists = async (filter, throwError = true) => {
   const contactExists = await Contact.exists(filter);
   if (contactExists && throwError) {
-    throw new HttpError(409, "User already exists..");
+    throw HttpError(409, "User already exists..");
   }
   return contactExists;
 };
