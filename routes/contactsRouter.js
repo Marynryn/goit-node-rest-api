@@ -13,8 +13,10 @@ import {
   updateContacts,
   updateStatusContact,
 } from "../controllers/contactsControllers.js";
+import { protect } from "../middlewares/usersMiddlewares.js";
 
 const contactsRouter = express.Router();
+contactsRouter.use(protect);
 
 contactsRouter.get("/", getAllContacts);
 
