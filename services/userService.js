@@ -44,12 +44,12 @@ export const logout = async (token) => {
   if (!userId) throw HttpError(401, "Not authorized");
 
   const currentUser = await getUserById(userId);
-
+  console.log(currentUser);
   if (!currentUser) throw HttpError(401, "Not authorized");
 
-  currentUser.token = null;
-  await currentUser.save();
-  return;
+    currentUser.token = null;
+    await currentUser.save();
+    return;
 };
 
 export * as userService from "./userService.js";
