@@ -23,11 +23,7 @@ export const getOneContact = catchAsync(async (req, res) => {
 });
 
 export const deleteContact = catchAsync(async (req, res) => {
-  const ownerId = req.user.id;
-  const removedContact = await contactsServices.removeContact(
-    req.params.id,
-    ownerId
-  );
+  const removedContact = await contactsServices.removeContact(req.params.id);
   if (!removedContact) {
     return res.status(404).json({
       message: "Not found",
@@ -49,10 +45,8 @@ export const createContact = catchAsync(async (req, res) => {
 });
 
 export const updateContacts = catchAsync(async (req, res) => {
-  const ownerId = req.user.id;
   const updatedContact = await contactsServices.updateContact(
     req.params.id,
-    ownerId,
     req.body,
     {
       new: true,
@@ -74,10 +68,10 @@ export const updateContacts = catchAsync(async (req, res) => {
 
 export const updateStatusContact = catchAsync(async (req, res) => {
   const { favorite } = req.body;
-  const ownerId = req.user.id;
+
   const result = await contactsServices.updateStatusContact(
     req.params.id,
-    ownerId,
+
     { favorite },
     { new: true }
   );
