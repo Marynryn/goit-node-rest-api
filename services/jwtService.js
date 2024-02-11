@@ -3,7 +3,7 @@ import HttpError from "../helpers/HttpError.js";
 
 export const signToken = (id) =>
   jwt.sign({ id }, process.env.SECRET, {
-    expiresIn: "1h",
+    expiresIn: "5h",
   });
 
 export const checkToken = (token) => {

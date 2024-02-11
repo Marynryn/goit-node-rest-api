@@ -12,26 +12,25 @@ export const signup = catchAsync(async (req, res) => {
     });
   }
 
-  const { user, token } = await userService.signup(req.body);
+  const newUser = await userService.signup(req.body);
 
   res.status(201).json({
     user: {
-      email: user.email,
-      subscription: user.subscription,
+      email: newUser.email,
+      subscription: newUser.subscription,
     },
   });
-  //   await userService.updateUserToken(user.id, token);
 });
 
 export const login = catchAsync(async (req, res) => {
-  const { user, token } = await userService.login(req.body);
+  const user = await userService.login(req.body);
 
   res.status(200).json({
     user: {
       email: user.email,
       subscription: user.subscription,
     },
-    token,
+    token: user.token,
   });
 });
 export const logout = catchAsync(async (req, res) => {

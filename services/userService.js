@@ -4,14 +4,20 @@ import HttpError from "../helpers/HttpError.js";
 import bcrypt from "bcrypt";
 
 export const signup = async (userData) => {
-  const newUser = await User.create({
+  const user = await User.create({
     ...userData,
   });
-  const token = jwtService.signToken(newUser.id);
-  newUser.token = token;
-  await newUser.save();
+  await user.hashPassword();
+  await user.save();
+  const token = jwtService.signToken(user.id);
 
-  return { user: newUser, token };
+  const newUser = await User.findByIdAndUpdate(
+    user._id,
+    { token },
+    { new: true }
+  );
+
+  return newUser;
 };
 export const checkUserExists = async (filter) => {
   const userExists = await User.exists(filter);
@@ -27,11 +33,7 @@ export const login = async ({ email, password }) => {
 
   if (!isPasswordValid) throw HttpError(401, "Email or password is wrong..");
 
-  user.password = undefined;
-
-  const token = jwtService.signToken(user.id);
-
-  return { user, token };
+  return user;
 };
 export const getUserById = (id) => User.findById(id);
 
@@ -44,12 +46,12 @@ export const logout = async (token) => {
   if (!userId) throw HttpError(401, "Not authorized");
 
   const currentUser = await getUserById(userId);
-  console.log(currentUser);
+
   if (!currentUser) throw HttpError(401, "Not authorized");
 
-    currentUser.token = null;
-    await currentUser.save();
-    return;
+  currentUser.token = null;
+  await currentUser.save();
+  return;
 };
 
 export * as userService from "./userService.js";
