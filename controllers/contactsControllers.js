@@ -43,7 +43,7 @@ export const createContact = catchAsync(async (req, res) => {
   if (!contact) {
     const ownerId = req.user.id;
     const newContact = await contactsServices.addContact(req.body, ownerId);
-    console.log(newContact);
+
     res.status(201).json(newContact);
   }
 });
