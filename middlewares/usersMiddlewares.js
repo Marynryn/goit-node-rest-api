@@ -1,6 +1,7 @@
 import { catchAsync } from "../helpers/catchAsync.js";
 import { jwtService } from "../services/jwtService.js";
 import { userService } from "../services/userService.js";
+import { ImageService } from "../services/imageService.js";
 import HttpError from "./../helpers/HttpError.js";
 
 export const protect = catchAsync(async (req, res, next) => {
@@ -23,3 +24,5 @@ export const protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
+
+export const uploadAvatar = ImageService.initUploadImageMiddleware("avatar");
