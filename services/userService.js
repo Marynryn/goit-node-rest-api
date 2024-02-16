@@ -56,13 +56,14 @@ export const logout = async (token) => {
   return;
 };
 export const updateMe = async (userData, user, file) => {
-  if (file) {
+  if (!file) throw HttpError(400, "Please, add the file");
+  else {
     user.avatarURL = await ImageService.saveImage(
       file,
       {
         maxFileSize: 2 * 1024,
-        width: 400,
-        height: 400,
+        width: 250,
+        height: 250,
       },
       user,
       "public",

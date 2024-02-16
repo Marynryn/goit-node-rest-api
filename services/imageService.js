@@ -44,6 +44,9 @@ export class ImageService {
       .quality(90)
       .writeAsync(path.join(fullFilePath, fileName));
 
-    return path.join(...pathSegments, fileName);
+    const imagePath = path.join(...pathSegments, fileName);
+    const avatarURL = imagePath.replace("public", ""); 
+
+    return avatarURL;
   }
 }
