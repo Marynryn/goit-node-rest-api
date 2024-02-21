@@ -1,5 +1,4 @@
 import { Contact } from "../model/contactModel.js";
-
 import HttpError from "../helpers/HttpError.js";
 
 export const getContactsList = (ownerId) => Contact.find({ owner: ownerId });

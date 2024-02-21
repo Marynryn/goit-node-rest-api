@@ -2,7 +2,7 @@ import { User } from "../model/userModel.js";
 import { jwtService } from "../services/jwtService.js";
 import HttpError from "../helpers/HttpError.js";
 import { ImageService } from "../services/imageService.js";
-import path from "path";
+import { sendEmail } from "../services/emailService.js";
 
 export const signup = async (userData) => {
   const user = await User.create({
@@ -21,6 +21,31 @@ export const signup = async (userData) => {
 
   return newUser;
 };
+export const verify = async (verificationToken) => {
+  const user = await User.findOne({ verificationToken });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  await User.findOneAndUpdate(user._id, {
+    verify: true,
+    verificationToken: "",
+  });
+};
+export const resendEmail = async (email) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  if (user.verify) throw HttpError(400, "Verification has already been passed");
+
+  const verifyEmail = {
+    to: user.email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${user.verificationToken}" >Click verify email</a>`,
+  };
+  await sendEmail(verifyEmail);
+};
 export const checkUserExists = async (filter) => {
   const userExists = await User.exists(filter);
   return userExists;
@@ -30,7 +55,7 @@ export const login = async ({ email, password }) => {
   const user = await User.findOne({ email }).select("+password");
 
   if (!user) throw HttpError(401, "Email or password is wrong");
-
+  if (!user.verify) throw HttpError(404, "User not found");
   const isPasswordValid = await user.checkPassword(password, user.password);
 
   if (!isPasswordValid) throw HttpError(401, "Email or password is wrong..");
