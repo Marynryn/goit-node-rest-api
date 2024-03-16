@@ -9,16 +9,16 @@ import {
   logout,
   getCurrentUser,
   updateMe,
-  verifyEmail,
-  resendVerifyEmail,
+  // verifyEmail,
+  // resendVerifyEmail,
 } from "../controllers/usersControllers.js";
 import { protect, uploadAvatar } from "../middlewares/usersMiddlewares.js";
 
 const userRouter = express.Router();
 
 userRouter.post("/register", validateCreateUserBody, signup);
-userRouter.get("/verify/:verificationToken", verifyEmail);
-userRouter.post("/verify", validateVerifyUserBody, resendVerifyEmail);
+// userRouter.get("/verify/:verificationToken", verifyEmail);
+// userRouter.post("/verify", validateVerifyUserBody, resendVerifyEmail);
 userRouter.post("/login", validateCreateUserBody, login);
 userRouter.post("/logout", logout);
 userRouter.get("/current", protect, getCurrentUser);
