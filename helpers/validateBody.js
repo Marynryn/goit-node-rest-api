@@ -1,4 +1,14 @@
-import { HttpError } from "./HttpError.js";
+import HttpError from "../helpers/HttpError.js";
+import {
+  createContactSchema,
+  updateContactSchema,
+  updateStatusContactSchema,
+} from "../schemas/contactsSchemas.js";
+import {
+  createUserSchema,
+  verifyUserSchema,
+  LoginUserSchema,
+} from "../schemas/userSchemas.js";
 
 const validateBody = (schema) => {
   const func = (req, _, next) => {
@@ -12,4 +22,11 @@ const validateBody = (schema) => {
   return func;
 };
 
-export default validateBody;
+export const validateCreateContactBody = validateBody(createContactSchema);
+export const validateUpdateContactBody = validateBody(updateContactSchema);
+export const validateUpdateStatusContact = validateBody(
+  updateStatusContactSchema
+);
+export const validateCreateUserBody = validateBody(createUserSchema);
+export const validateVerifyUserBody = validateBody(verifyUserSchema);
+export const validateLoginUserBody = validateBody(LoginUserSchema);
