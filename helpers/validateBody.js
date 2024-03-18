@@ -4,7 +4,11 @@ import {
   updateContactSchema,
   updateStatusContactSchema,
 } from "../schemas/contactsSchemas.js";
-import { createUserSchema, verifyUserSchema } from "../schemas/userSchemas.js";
+import {
+  createUserSchema,
+  verifyUserSchema,
+  LoginUserSchema,
+} from "../schemas/userSchemas.js";
 
 const validateBody = (schema) => {
   const func = (req, _, next) => {
@@ -25,3 +29,4 @@ export const validateUpdateStatusContact = validateBody(
 );
 export const validateCreateUserBody = validateBody(createUserSchema);
 export const validateVerifyUserBody = validateBody(verifyUserSchema);
+export const validateLoginUserBody = validateBody(LoginUserSchema);

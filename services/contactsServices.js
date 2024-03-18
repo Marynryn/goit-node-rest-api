@@ -23,7 +23,7 @@ export const updateStatusContact = (id, ownerId, body) =>
 export const checkContactExists = async (filter, throwError = true) => {
   const contactExists = await Contact.exists(filter);
   if (contactExists && throwError) {
-    throw HttpError(409, "User already exists..");
+    throw HttpError(409, "Contact already exists..");
   }
   return contactExists;
 };

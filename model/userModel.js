@@ -4,6 +4,10 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: [true, "Name is required"],
+    },
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -29,6 +33,7 @@ const userSchema = new Schema(
     },
     verificationToken: {
       type: String,
+      default: "",
       required: [true, "Verify token is required"],
     },
   },

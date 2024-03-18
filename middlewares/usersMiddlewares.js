@@ -10,15 +10,18 @@ export const protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.split(" ")[1];
 
   const userId = jwtService.checkToken(token);
-  if (!userId) throw HttpError(401, "Not authorized");
+  console.log(userId);
+  if (!userId) throw HttpError(401, "Not authorized 1");
   const currentUser = await userService.getUserById(userId);
-
+  console.log("1");
   if (!currentUser) {
-    throw HttpError(401, "Not authorized");
+    console.log("2");
+    throw HttpError(401, "Not authorized 2");
   }
 
   if (currentUser.token != token) {
-    throw HttpError(401, "Not authorized");
+    console.log("3");
+    throw HttpError(401, "Not authorized 3");
   }
 
   req.user = currentUser;

@@ -38,7 +38,7 @@ export const deleteContact = catchAsync(async (req, res) => {
 
 export const createContact = catchAsync(async (req, res) => {
   const contact = await contactsServices.checkContactExists({
-    email: req.body.email,
+    name: req.body.name,
   });
   if (!contact) {
     const ownerId = req.user.id;

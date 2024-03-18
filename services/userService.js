@@ -21,6 +21,7 @@ export const signup = async (userData) => {
 
   return newUser;
 };
+
 export const verify = async (verificationToken) => {
   const user = await User.findOne({ verificationToken });
   if (!user) {
@@ -28,7 +29,7 @@ export const verify = async (verificationToken) => {
   }
   await User.findOneAndUpdate(user._id, {
     verify: true,
-    verificationToken: "",
+    verificationToken: true,
   });
 };
 export const resendEmail = async (email) => {
@@ -59,25 +60,29 @@ export const login = async ({ email, password }) => {
   const isPasswordValid = await user.checkPassword(password, user.password);
 
   if (!isPasswordValid) throw HttpError(401, "Email or password is wrong..");
-
+  const token = jwtService.signToken(user._id);
+  user.token = token;
+  await user.save();
   return user;
 };
 export const getUserById = (id) => User.findById(id);
 
 export const logout = async (token) => {
   if (!token) {
-    throw new HttpError(401, "Not authorized");
+    throw HttpError(401, "Not authorized 6");
   }
   const userId = jwtService.checkToken(token);
 
-  if (!userId) throw HttpError(401, "Not authorized");
+  if (!userId) throw HttpError(401, "Not authorized 7 ");
 
   const currentUser = await getUserById(userId);
 
-  if (!currentUser) throw HttpError(401, "Not authorized");
+  if (!currentUser) throw HttpError(401, "Not authorized 8");
 
   currentUser.token = null;
+  console.log(currentUser);
   await currentUser.save();
+  console.log(currentUser.save());
   return;
 };
 export const updateMe = async (userData, user, file) => {
